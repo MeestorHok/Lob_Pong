@@ -3,8 +3,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 class Canvas extends JComponent {
-    GameEngine engine;
-    InputManager input;
+    private GameEngine engine;
+    private InputManager input;
 
     Canvas(GameEngine engine) {
         this.engine = engine;
@@ -12,6 +12,7 @@ class Canvas extends JComponent {
 
         addMouseMotionListener(input);
         addKeyListener(input);
+        setFocusable(true);
 
         setPreferredSize(new Dimension(850, 500));
     }

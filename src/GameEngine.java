@@ -1,3 +1,5 @@
+import exceptions.RoundCompleteException;
+
 import javax.swing.Timer;
 import java.awt.Graphics;
 
@@ -10,20 +12,31 @@ class GameEngine {
     private Ball ball;
     private Paddle paddle;
 
-    private GameEngine() {
+    GameEngine() {
         // Game Managers
         canvas = new Canvas(this);
         manager = new GameManager();
         physics = new PhysicsEngine();
+    }
 
+    // Start a game
+    void start() {
         // Game Components
         int middle = (int) Math.round(canvas.getWidth() / 2.0);
-        ball = new Ball(middle, canvas.getHeight() - 15);
-        paddle = new Paddle(middle, canvas.getHeight() - 10);
+        ball = new Ball(middle, canvas.getHeight() - 45);
+        paddle = new Paddle(middle, canvas.getHeight() - 30);
 
         // Animation Timer (using lambda expression)
-        aTimer = new Timer(100, e -> {
-            ball.updatePosition(physics.getBallX(), physics.getBallY());
+        aTimer = new Timer(10, e -> {
+            // If round is over, go to the next one.
+            try {
+                manager.countdown();
+            } catch(RoundCompleteException ex) {
+                manager.nextRound();
+                resetBallAndPaddle();
+            }
+
+            // ball.updatePosition(physics.getBallX(), physics.getBallY());
             canvas.repaint();
         });
 
@@ -34,15 +47,24 @@ class GameEngine {
         return canvas;
     }
 
+    // Draw the ball and paddle on the screen
     void drawBall(Graphics g) {
         ball.draw(g);
     }
+    void drawPaddle(Graphics g) {
+        paddle.draw(g);
+    }
 
-    void updatePaddle(int x) {
+    // allow user to move the paddle either via left-right keys or mouse cursor
+    void updatePaddleViaKey(boolean direction) {
+        paddle.updatePosition(direction, canvas.getWidth());
+    }
+    void updatePaddleViaMouse(int x) {
         paddle.updatePosition(x, canvas.getWidth());
     }
 
-    void drawPaddle(Graphics g) {
-        paddle.draw(g);
+    private void resetBallAndPaddle() {
+        paddle.resetPosition();
+        ball.resetPosition();
     }
 }

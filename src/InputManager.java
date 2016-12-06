@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 class InputManager implements MouseMotionListener, KeyListener {
-    GameEngine engine;
+    private GameEngine engine;
 
     InputManager(GameEngine engine) {
         this.engine = engine;
@@ -15,10 +15,15 @@ class InputManager implements MouseMotionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // Handle input
-        int x = 0;
-
-        movePaddle(x);
+        // Move left or right with arrow keys
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                engine.updatePaddleViaKey(false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                engine.updatePaddleViaKey(true);
+                break;
+        }
     }
 
     @Override
@@ -29,13 +34,7 @@ class InputManager implements MouseMotionListener, KeyListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        // Handle input
-        int x = 0;
-
-        movePaddle(x);
-    }
-
-    void movePaddle(int x) {
-        engine.updatePaddle(x);
+        // Get the position of the mouse
+        engine.updatePaddleViaMouse(e.getX());
     }
 }
