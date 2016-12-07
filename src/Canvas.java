@@ -1,6 +1,5 @@
 import javax.swing.JComponent;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 
 class Canvas extends JComponent {
     private GameEngine engine;
@@ -18,7 +17,16 @@ class Canvas extends JComponent {
     }
 
     public void paintComponent(Graphics g) {
+        // Scene Elements
         engine.drawBall(g);
         engine.drawPaddle(g);
+        engine.drawObstacles(g);
+
+        // GUI
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+        engine.drawTimer(g);
+        engine.drawRound(g);
+        engine.drawScore(g);
+        engine.drawLives(g);
     }
 }

@@ -33,7 +33,8 @@ class GameEngine {
                 manager.countdown();
             } catch(RoundCompleteException ex) {
                 manager.nextRound();
-                resetBallAndPaddle();
+                paddle.shrink();
+                //resetBallAndPaddle();
             }
 
             // ball.updatePosition(physics.getBallX(), physics.getBallY());
@@ -47,14 +48,6 @@ class GameEngine {
         return canvas;
     }
 
-    // Draw the ball and paddle on the screen
-    void drawBall(Graphics g) {
-        ball.draw(g);
-    }
-    void drawPaddle(Graphics g) {
-        paddle.draw(g);
-    }
-
     // allow user to move the paddle either via left-right keys or mouse cursor
     void updatePaddleViaKey(boolean direction) {
         paddle.updatePosition(direction, canvas.getWidth());
@@ -66,5 +59,30 @@ class GameEngine {
     private void resetBallAndPaddle() {
         paddle.resetPosition();
         ball.resetPosition();
+    }
+
+    // Draw stuff
+    void drawBall(Graphics g) {
+        ball.draw(g);
+    }
+    void drawPaddle(Graphics g) {
+        paddle.draw(g);
+    }
+    void drawObstacles(Graphics g) {
+
+    }
+
+    // GUI
+    void drawTimer(Graphics g) {
+        manager.drawTimer(g, canvas.getWidth());
+    }
+    void drawRound(Graphics g) {
+        manager.drawRound(g, canvas.getWidth());
+    }
+    void drawScore(Graphics g) {
+        manager.drawScore(g);
+    }
+    void drawLives(Graphics g) {
+        manager.drawLives(g);
     }
 }
