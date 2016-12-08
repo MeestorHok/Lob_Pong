@@ -76,10 +76,10 @@ class GameEngine {
         if(manager.hasLives()) {
             manager.nextRound(false);
             resetBallAndPaddle();
-        } else {
-            manager.stop();
-            playing = false;
         }
+
+        manager.stop();
+        playing = false;
     }
 
     void addPoints() {
