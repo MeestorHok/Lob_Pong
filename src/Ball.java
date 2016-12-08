@@ -18,9 +18,11 @@ class Ball {
     }
 
     // move ball to position
-    void updatePosition(int x, int y, int canvasWidth) {
-        this.x = Math.max(0, Math.min(canvasWidth - DIAMETER, x)); // keep within right boundary
-        this.y = Math.max(0, y); // don't let it pass the top
+    void updatePosition(PhysicsEngine physics, int canvasWidth, int canvasHeight) {
+        x = Math.max(0, Math.min(canvasWidth - DIAMETER, physics.getX(x))); // keep within right boundary
+        y = Math.max(0, physics.getY(y)); // don't let it pass the top
+
+        physics.checkCollision(x, y, canvasWidth, canvasHeight, DIAMETER, null);
     }
 
     // put ball back at center

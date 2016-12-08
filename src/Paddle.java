@@ -39,6 +39,11 @@ class Paddle {
         x = bufferedX = startingX;
     }
 
+    // Check if something is colliding
+    boolean isColliding(int x) {
+        return (x >= this.x - (width / 2) && x <= this.x + (width / 2));
+    }
+
     // make the width a little smaller after each round
     void shrink() {
         width = (int) Math.round(width * DIFFICULTY_FACTOR);

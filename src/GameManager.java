@@ -14,8 +14,10 @@ class GameManager {
     private int round;
     private int timeLeft;
     private int lives;
+    private boolean playing;
 
     GameManager() {
+        playing = false;
         multiplier = 1.0;
         timeBonusCountdown = 0;
         score = 0;
@@ -25,11 +27,13 @@ class GameManager {
     }
 
     // Move on to the next round
-    void nextRound() {
+    void nextRound(boolean getBonus) {
         round++;
 
-        awardBonus();
+        if (getBonus) awardBonus();
+
         resetTimer();
+        stop();
     }
 
     // Draw the timer
@@ -39,18 +43,20 @@ class GameManager {
 
     // Countdown timer
     void countdown() throws RoundCompleteException {
-        timeLeft--;
-        timeBonusCountdown++;
+        if (playing) {
+            timeLeft--;
+            timeBonusCountdown++;
 
-        // every second
-        if (timeBonusCountdown >= 100) {
-            awardTimeBonus();
-            timeBonusCountdown = 0;
-        }
+            // every second
+            if (timeBonusCountdown >= 100) {
+                awardTimeBonus();
+                timeBonusCountdown = 0;
+            }
 
-        // If you survive the full time
-        if (timeLeft == 0) {
-            throw new RoundCompleteException();
+            // If you survive the full time
+            if (timeLeft == 0) {
+                throw new RoundCompleteException();
+            }
         }
     }
 
@@ -59,6 +65,16 @@ class GameManager {
         multiplier *= DIFFICULTY_FACTOR;
 
         timeLeft = (int) Math.round(STARTING_TIME * multiplier);
+    }
+
+    // Stop the game
+    void stop() {
+        playing = false;
+    }
+
+    // Start the game
+    void start() {
+        playing = true;
     }
 
     // Draw the timer
@@ -77,23 +93,27 @@ class GameManager {
         score += (int) Math.round(SCORE_BONUS * Math.pow(DIFFICULTY_FACTOR, round - 1)); // Increases after each round
     }
 
+    void hitBonus() {
+        score += 5;
+    }
+
     // Draw the timer
     void drawScore(Graphics g) {
         g.drawString("Score: " + score, 20, 20);
     }
 
     // Check if we have extra lives
-    private boolean hasLives() {
+    boolean hasLives() {
         return lives > 0;
     }
 
     // Decrement lives when player fails
-    private void loseLife() {
+    void loseLife() {
         lives--;
     }
 
     // Award extra life to user
-    private void gainLife() {
+    void gainLife() {
         lives++;
     }
 

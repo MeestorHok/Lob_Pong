@@ -17,6 +17,9 @@ class InputManager implements MouseMotionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         // Move left or right with arrow keys
         switch(e.getKeyCode()) {
+            case KeyEvent.VK_SPACE:
+                engine.startRound();
+                break;
             case KeyEvent.VK_LEFT:
                 engine.updatePaddleViaKey(false);
                 break;
